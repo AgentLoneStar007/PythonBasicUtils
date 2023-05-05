@@ -1,0 +1,9 @@
+{
+  "dependencies": [
+    {
+      "name": "PyYAML",
+      "import": "import yaml",
+      "install": "python3 -m pip install pyyaml -q -q -q"
+    }
+  ]
+}

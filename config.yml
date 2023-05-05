@@ -1,0 +1,2 @@
+# Enable this option to log more verbose output. Makes debugging easier. 
+debug: false
