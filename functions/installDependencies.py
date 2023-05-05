@@ -1,3 +1,6 @@
+## Dependency installation system by AgentLoneStar007
+## https://github.com/AgentLoneStar007
+
 import json
 import subprocess
 from functions.logger import Log
@@ -47,26 +50,34 @@ class InstallDependencies:
                     Log(logFile, 'err', f'Could not load dependency {names[currentItem]}.')
                     autoInstall = input('Would you like to attempt an autoinstall? <Y/n> ')
                     if autoInstall.lower() == 'y':
-                        Log(logFile, 'debug', f'Attempting autoinstall of {names[currentItem]} with command "{installs[currentItem]}."')
-                        # Run the given installation command
+                        # Run the given installation command and log it as debug
+                        Log(logFile, 'debug', f'Attempting autoinstall of {names[currentItem]} with command'
+                                              f' "{installs[currentItem]}."')
                         process = subprocess.Popen(installs[currentItem], shell=True, stdout=subprocess.PIPE)
                         process.wait()
                         # If successful, close the program.
                         if process.returncode == 0:
-                            print(f'{Colors.ForeG.green}Installed dependency {names[currentItem]} successfully. Continuing...{Colors.reset}')
+                            print(f'{Colors.ForeG.green}Installed dependency {names[currentItem]} successfully. '
+                                  f'Continuing...{Colors.reset}')
                             Log(logFile, 'info', f'Installed dependency {names[currentItem]} successfully.')
-                        # If not, give name and install command of the module, then exit.
+
+                        # If unsuccessful, give name and install command of the module, then exit.
                         else:
-                            print(f'{Colors.ForeG.red}Install failed. If you wish to attempt a manual installation, the name of the '
-                                  f'module is {names[currentItem]}, and the install command should be "{installs[currentItem]}".{Colors.reset}')
-                            Log(logFile, 'err', f'Failed to autoinstall dependency {names[currentItem]}. Command exited with code "{process.returncode}."')
+                            print(f'{Colors.ForeG.red}Install failed. If you wish to attempt a manual installation, '
+                                  f'the name of the module is {names[currentItem]}, and the install command should be'
+                                  f'"{installs[currentItem]}".{Colors.reset}')
+                            Log(logFile, 'err', f'Failed to autoinstall dependency {names[currentItem]}. Command '
+                                                f'exited with code "{process.returncode}."')
                             input('Press Enter to exit...')
                             quit()
+
                     # If user does not attempt autoinstall, exit
                     else:
-                        print(f'{Colors.ForeG.red}Cannot continue without dependency "{names[currentItem]}."{Colors.reset}')
+                        print(f'{Colors.ForeG.red}Cannot continue without dependency "{names[currentItem]}."'
+                              f'{Colors.reset}')
                         input('Press Enter to exit...')
                         quit()
+
         # If any of the three lists are empty, exit
         else:
             print(f'{Colors.ForeG.red}Dependency file is empty, for some reason. Unable to continue.{Colors.reset}')

@@ -1,3 +1,6 @@
+## Logging system by AgentLoneStar007
+## https://github.com/AgentLoneStar007
+
 from datetime import datetime
 import os
 from functions.loadConfig import LoadConfig

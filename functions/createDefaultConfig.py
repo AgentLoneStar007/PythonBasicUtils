@@ -1,3 +1,6 @@
+## Default Config Creation system by AgentLoneStar007
+## https://github.com/AgentLoneStar007
+
 import os
 from functions.logger import Log
 

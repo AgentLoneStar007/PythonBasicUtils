@@ -1,3 +1,6 @@
+## Configuration loading system by AgentLoneStar007
+## https://github.com/AgentLoneStar007
+
 class LoadConfig:
     # Main function(has a return value so can't be __init__)
     def isConfigLoaded(self):
