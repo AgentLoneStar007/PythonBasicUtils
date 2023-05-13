@@ -3,7 +3,7 @@
 
 from functions.installDependencies import InstallDependencies
 from functions.createDefaultConfig import CreateDefaultConfig
-from functions.logger import setCurrentFile
+from functions.logger import setCurrentFile  # Import Log as well if you wish to log anything in Main.
 
 
 class Main:
@@ -18,6 +18,8 @@ class Main:
 
         CreateDefaultConfig(currentLogFile)
         InstallDependencies(currentLogFile)
+
+        # Your code here. Don't forget to pass the log file through to your classes and functions.
 
 
 Main()
