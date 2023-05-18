@@ -2,12 +2,14 @@
 
 A collection of basic Python utilities for use in any Python project, in the form of
 subclasses and files, and not as a third-party dependency that needs installation.
+Completely cross-platform, functioning on anything supporting Python.
 
 ### Features:
 
 - Dependency installation
 - Logging utility
 - Configuration system via PyYAML
+- Graphical error/dialogue windows via Tkinter
 - Commenting throughout for readable, understandable code
 
 ### Installation/Usage:
@@ -36,7 +38,7 @@ dependency already in `dependencies.json`, and change what is needed. Example:
 }
 ```
 (Note that the `-q` args in the command are to prevent any output from the command.
-And it's good practice to use `python -m pip` instead of `pip` directly, due to some
+And it's good practice to use `python3 -m pip` instead of `pip` directly, due to some
 individuals not having pip added to PATH.)
 
 #### Logging:
@@ -58,6 +60,14 @@ config = loadConfig.isConfigLoaded()
 ```
 `config` will return a dictionary with all config values in it. If you add any values
 to the config file, be sure to add them to the `createDefaultConfig` function as well.
+
+### To-do:
+
+- Add an option to handle dependency installation in a window, instead of a terminal.
+- Add more graphical elements overall.
+- Add a `project.json` file that contains the name of the project, it's author, and
+maybe even the current file to log to(making it so you don't have to pass through
+the current log file to each subclass.)
 
 ### Credit:
 
