@@ -30,7 +30,6 @@ def loadData():
 
 class InstallDependencies:
     def __init__(self, logFile):
-        # Tests for dependencies. If config is loaded, use Log. If not, use a regular print message.
         print('Testing for dependencies...')
         names, imports, installs = loadData()
 

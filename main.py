@@ -4,6 +4,7 @@
 from functions.installDependencies import InstallDependencies
 from functions.createDefaultConfig import CreateDefaultConfig
 from functions.logger import setCurrentFile  # Import Log as well if you wish to log anything in Main.
+from functions.graphicalError import GError
 
 
 class Main:
@@ -14,10 +15,10 @@ class Main:
         # 3. Install dependencies.
         # 4. Load the configuration file.
 
-        currentLogFile = setCurrentFile()
+        logFile = setCurrentFile()
 
-        CreateDefaultConfig(currentLogFile)
-        InstallDependencies(currentLogFile)
+        CreateDefaultConfig(logFile)
+        InstallDependencies(logFile)
 
         # Your code here. Don't forget to pass the log file through to your classes and functions.
 
