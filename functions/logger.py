@@ -70,7 +70,7 @@ def setCurrentFile():
 
 class Log:
     def __init__(self, logFile, infoType, message):
-        # Set current time var
+        # Create current time var
         now = datetime.now()
         currentTime = now.strftime('[%m/%d/%Y-%H:%M:%S]')
 

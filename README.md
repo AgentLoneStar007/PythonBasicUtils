@@ -61,6 +61,21 @@ config = loadConfig.isConfigLoaded()
 `config` will return a dictionary with all config values in it. If you add any values
 to the config file, be sure to add them to the `createDefaultConfig` function as well.
 
+#### Graphical Errors/Dialogues
+To use a Graphical Error(GError), simply import `from functions.graphicalError import
+GError`. While it is named error, it can be used for dialogues as well.
+
+GError takes multiple arguments:
+- `message`: A string to show as a message in the window(required)
+- `messageToLog`: The message to log to file, if different from message. Pass `None`
+if the message is the same.
+- `windowTitle`: The title for the window. Also pass `None` if you want to use the
+default of "Error"),
+- `custom_buttons`: custom buttons you can create along with the default "OK" button.
+Pass a dictionary in this format for your buttons:`{"button":"code to execute"}`.
+A simple example would be "`{"Print":"print('hi')"}`".
+- `logFile`: The file to log to. (required)
+
 ### To-do:
 
 - Add an option to handle dependency installation in a window, instead of a terminal.
