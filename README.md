@@ -51,15 +51,23 @@ only outputs to the current log file. Any output to the terminal must be done wi
 print statements.
 
 #### Config:
-To load config, import `from functions.loadConfig import LoadConfig`. You must create
-an object of the `loadConfig` class to load the config. Example:
+To load config, import `from functions.loadConfig import loadConfig`. Then simply create
+a config var with `loadConfig` as its value. Example:
 ```python
-from functions.loadConfig import LoadConfig
-loadConfig = LoadConfig()
-config = loadConfig.isConfigLoaded()
+from functions.loadConfig import loadConfig
+config = loadConfig()
 ```
-`config` will return a dictionary with all config values in it. If you add any values
-to the config file, be sure to add them to the `createDefaultConfig` function as well.
+`config` will return a dictionary with all config values in it. If there is no config
+file present, the function will return `False`. The best way to create a system for
+using the config is as follows:
+```python
+if config:
+    myValue = config['myValue']
+else:
+    myValue = 'some default value'
+```
+If you add any values to the config file, be sure to add them to the
+`createDefaultConfig` function as well.
 
 #### Graphical Errors/Dialogues
 To use a Graphical Error(GError), simply import `from functions.graphicalError import

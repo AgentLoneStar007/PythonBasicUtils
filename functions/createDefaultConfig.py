@@ -9,6 +9,9 @@ class CreateDefaultConfig:
     def __init__(self, logFile):
         defaultConfig = '''# Enable this option to log more verbose output. Makes debugging easier. 
 debug: false
+
+# Set location of log files
+logFolder: "logs"
 '''
 
         if not os.path.isfile('config.yml'):

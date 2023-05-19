@@ -3,7 +3,7 @@
 
 from datetime import datetime
 import os
-from functions.loadConfig import LoadConfig
+from functions.loadConfig import loadConfig
 
 
 def formatInput(typeInput):
@@ -23,9 +23,16 @@ def logFileSort(inp):
 
 
 def setCurrentFile():
+    # Load the folder to log to from config, if loaded
+    config = loadConfig()
+    if config:
+        logFolder = config['logFolder']
+    else:
+        logFolder = 'logs'
+
     # If there is not a logs folder, create it
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
+    if not os.path.exists(logFolder):
+        os.makedirs(logFolder)
 
     # Set current date var
     now = datetime.now()
@@ -33,7 +40,7 @@ def setCurrentFile():
 
     # Create an array and append all logs in the log folder to it
     existingLogs = []
-    for x in os.listdir('logs'):
+    for x in os.listdir(logFolder):
         if x.endswith('.log'):
             try:
                 if 1 <= int(x[:2]) <= 12:
@@ -81,14 +88,15 @@ class Log:
             infoType = formatInput(infoType)
 
         # Check if config is loaded. If not, log debugs by default. If so, load config.
-        loadConfig = LoadConfig()
-        config = loadConfig.isConfigLoaded()
+        config = loadConfig()
         if config:
             logDebug = config['debug']
+            logFolder = config['logFolder']
         else:
             logDebug = True
+            logFolder = 'logs'
 
-        with open(f'logs/{logFile}', 'a') as logFile:
+        with open(f'{logFolder}/{logFile}', 'a+') as logFile:
             if infoType == 'DEBUG' and logDebug:
                 logFile.write(f'{currentTime} <{infoType}>: {message}\n')
             if infoType != 'DEBUG':

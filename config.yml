@@ -1,2 +1,5 @@
 # Enable this option to log more verbose output. Makes debugging easier. 
 debug: false
+
+# Set location of log files
+logFolder: "logs"
