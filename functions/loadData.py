@@ -1,6 +1,8 @@
 ## Configuration loading system by AgentLoneStar007
 ## https://github.com/AgentLoneStar007
 
+import json
+
 def loadConfig():
     try:
         import yaml
@@ -11,3 +13,10 @@ def loadConfig():
 
     except:
         return False
+
+
+def loadAppData():
+    with open('data/app.json', 'r') as file:
+        app = json.load(file)
+        file.close()
+        return app

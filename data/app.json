@@ -1,6 +1,6 @@
 {
-  "name": "My Beginner App",
+  "name": "My App",
   "version": 0.1,
-  "author": "Me, duh",
-  "currentlogfile": "no touchy"
+  "author": "A Person",
+  "app-type": "terminal"
 }

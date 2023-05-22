@@ -3,7 +3,7 @@
 
 from datetime import datetime
 import os
-from functions.loadConfig import loadConfig
+from functions.loadData import loadConfig
 
 
 def formatInput(typeInput):

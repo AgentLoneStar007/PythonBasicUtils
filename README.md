@@ -18,6 +18,20 @@ Simply clone this repository, and either start coding your project inside the Ma
 class, or take what's currently inside the Main class and implement it into your
 main.py file/program.
 
+#### Setting up your app:
+Simply change the values in `data/app.json`. Default values are:
+```json
+{
+  "name": "My App",
+  "version": 0.1,
+  "author": "A Person",
+  "app-type": "terminal"
+}
+```
+`app-type` can be either "terminal" or "graphical". Terminal will output everything
+in the terminal, obviously, while Graphical will create and manage windows via Python's
+stock Tkinter GUI system. Currently still working on more GUI support.
+
 #### Dependencies:
 To specify a dependency that requires installation, simply copy the one existing
 dependency already in `dependencies.json`, and change what is needed. Example:
@@ -53,8 +67,10 @@ print statements.
 #### Config:
 To load config, import `from functions.loadConfig import loadConfig`. Then simply create
 a config var with `loadConfig` as its value. Example:
+
 ```python
-from functions.loadConfig import loadConfig
+from functions.loadData import loadConfig
+
 config = loadConfig()
 ```
 `config` will return a dictionary with all config values in it. If there is no config
@@ -78,7 +94,7 @@ GError takes multiple arguments:
 - `messageToLog`: The message to log to file, if different from message. Pass `None`
 if the message is the same.
 - `windowTitle`: The title for the window. Also pass `None` if you want to use the
-default of "Error"),
+default of "(AppName) - Error"),
 - `custom_buttons`: custom buttons you can create along with the default "OK" button.
 Pass a dictionary in this format for your buttons:`{"button":"code to execute"}`.
 A simple example would be "`{"Print":"print('hi')"}`".
@@ -88,9 +104,9 @@ A simple example would be "`{"Print":"print('hi')"}`".
 
 - Add an option to handle dependency installation in a window, instead of a terminal.
 - Add more graphical elements overall.
-- Add a `project.json` file that contains the name of the project, it's author, and
-maybe even the current file to log to(making it so you don't have to pass through
-the current log file to each subclass.)
+- Find a way to not have to pass the current log file to every subclass and function.
+- Add more error handling for the program.
+- Create an automatic update system.
 
 ### Credit:
 

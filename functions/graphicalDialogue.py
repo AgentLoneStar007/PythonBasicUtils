@@ -1,12 +1,16 @@
 from functions.logger import Log
+from functions.loadData import loadAppData
 import tkinter as tk
 import textwrap
 
 
-class GError:
+class GDialogue:
     # The arguments are as follows: message to show, message to log(if different from message to show; if not, pass None
     # as the arg), and custom buttons. Pass a dictionary in for custom buttons with a format of {"buttonName":"command"}
     def __init__(self, message: str, messageToLog, windowTitle, custom_buttons, logFile: str):
+        # Load the app's name
+        appName = loadAppData()['name']
+
         # If the messageToLog is a string, go ahead and log it
         if type(messageToLog) == str:
             Log(logFile, 'err', messageToLog)
@@ -30,7 +34,7 @@ class GError:
         if type(windowTitle) == str and len(windowTitle) <= 20:
             title = windowTitle
         else:
-            title = 'Error'
+            title = f'{appName} - Error'
 
         # Create the window
         window = tk.Tk()
@@ -48,7 +52,8 @@ class GError:
         # Create, if any, custom buttons.
         if type(custom_buttons) == dict:
             for x in custom_buttons:
-                y = tk.Button(window, text=x, width=7, command=lambda: exec(custom_buttons[x]))
+                buttonLength = len(x)
+                y = tk.Button(window, text=x, width=buttonLength, command=lambda: exec(custom_buttons[x]))
                 y.pack(anchor='e', padx=5, pady=5, side=tk.RIGHT)
 
         # Keep the window running until closed
