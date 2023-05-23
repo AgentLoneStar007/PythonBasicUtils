@@ -2,24 +2,26 @@
 
 A collection of basic Python utilities for use in any Python project, in the form of
 subclasses and files, and not as a third-party dependency that needs installation.
-Completely cross-platform, functioning on anything supporting Python.
+Completely cross-platform, functioning on anything supporting Python 3. (No support for
+Python 2 is planned.)
 
 ### Features:
 
 - Dependency installation
 - Logging utility
-- Configuration system via PyYAML
+- Easy-to-use configuration system via PyYAML
+- Support for both terminal and graphical apps
+- Completely cross-platform
 - Graphical error/dialogue windows via Tkinter
 - Commenting throughout for readable, understandable code
 
 ### Installation/Usage:
 
-Simply clone this repository, and either start coding your project inside the Main
-class, or take what's currently inside the Main class and implement it into your
-main.py file/program.
+Simply clone this repository and start creating your project inside the Main
+class.
 
 #### Setting up your app:
-Simply change the values in `data/app.json`. Default values are:
+Change the values in `data/app.json` to your liking. Default values are:
 ```json
 {
   "name": "My App",
@@ -30,11 +32,12 @@ Simply change the values in `data/app.json`. Default values are:
 ```
 `app-type` can be either "terminal" or "graphical". Terminal will output everything
 in the terminal, obviously, while Graphical will create and manage windows via Python's
-stock Tkinter GUI system. Currently still working on more GUI support.
+stock Tkinter GUI system. Version currently doesn't do much outside of cosmetic value,
+but it will have more importance when I finish the update system.
 
 #### Dependencies:
-To specify a dependency that requires installation, simply copy the one existing
-dependency already in `dependencies.json`, and change what is needed. Example:
+To specify a dependency that requires installation, I would recommend copying the one
+existing dependency already in `dependencies.json`, and changing what is needed. Example:
 ```json
 {
   "dependencies": [
@@ -51,9 +54,10 @@ dependency already in `dependencies.json`, and change what is needed. Example:
   ]
 }
 ```
-(Note that the `-q` args in the command are to prevent any output from the command.
+(Note that the `-q` args in the command are to prevent any output from Pip.
 And it's good practice to use `python3 -m pip` instead of `pip` directly, due to some
-individuals not having pip added to PATH.)
+individuals not having pip added to PATH. Specify `python3` to avoid interference with
+Python 2, if it's installed.)
 
 #### Logging:
 Import `from functions.logger import Log` in any file or function that you wish to

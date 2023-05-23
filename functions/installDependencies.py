@@ -35,6 +35,8 @@ def loadDependencies():
 def graphicalInstall(logFile: str, failedInstalls: list):
     def gInstall2():
         def gInstall3():
+            # If any dependencies failed, update the top label to give more information, and update the button to quit
+            # the program
             if anyFailed:
                 header['text'] = 'Some dependencies failed to install.\nCannot continue.'
                 mainButton2.destroy()
@@ -43,57 +45,69 @@ def graphicalInstall(logFile: str, failedInstalls: list):
                 mainButton3["command"] = lambda: quit()
                 mainButton3.place(x=325, y=270, width=70, height=25)
                 window.update()
+                # Must start a main loop; otherwise window will close immediately
                 window.mainloop()
 
+            # Quit the window and continue with the program otherwise
             window.destroy()
 
         # Update the window for autoinstall
+        ## Update content box
         header['text'] = 'Attempting installation...'
         contentBox['bg'] = '#000000'
         contentBox.delete('1.0', 'end')
         contentBox['font'] = tkFont.Font(family='Fixedsys', size=8)
+        ## Destroy unneeded items
         footerLabel.destroy()
         mainButton.destroy()  # pack_forget() isn't working, so we use destroy()
         quitButton.destroy()
         window.update()
 
+        # Install the dependencies
         anyFailed = False
+
+        # Function to search the content box and find the last printed message, then tag it
+        def search(keyword, tag):
+            pos = '1.0'
+            while True:
+                idx = contentBox.search(keyword, pos, 'end')
+                if not idx:
+                    break
+                pos = '{}+{}c'.format(idx, len(keyword))
+                contentBox.tag_add(f'{tag}', idx, pos)
+
+        # I used Y here because X was used earlier
         for y in failedInstalls:
+            # Attempt to install the dependency
             process = subprocess.Popen(installs[names.index(y)], shell=True, stdout=subprocess.PIPE)
             process.wait()
             # If successful, continue
             if process.returncode == 0:
+                # Create the message, insert it into the content box...
                 message = f'Installed dependency {y} successfully. Continuing...'
                 contentBox.insert('insert', message + '\n\n')
-                pos = '1.0'
-                while True:
-                    idx = contentBox.search(message, pos, 'end')
-                    if not idx:
-                        break
-                    pos = '{}+{}c'.format(idx, len(message))
-                    contentBox.tag_add(f'FAILED-{y}', idx, pos)
-
-                contentBox.tag_config(f'FAILED-{y}', foreground="green")
+                # Then use search() to tag it, and use the tag to color it accordingly
+                search(message, y)
+                contentBox.tag_config(f'{y}', foreground="green")
+                # Finally log it all
                 Log(logFile, 'info', f'Installed dependency {y} successfully.')
 
             # If unsuccessful, give name and install command of the module, then continue
             else:
+                # If any dependency failed to install, update the anyFailed var to true
                 anyFailed = True
-                message = f'Install of {y} failed. If you wish to attempt a manual installation, the install command should be "{installs[names.index(y)]}".'
+                # See above for explanation of the following
+                message = f'Install of {y} failed. If you wish to attempt a manual installation, the install command ' \
+                          f'should be "{installs[names.index(y)]}".'
                 contentBox.insert('insert', message + '\n\n')
-                pos = '1.0'
-                while True:
-                    idx = contentBox.search(message, pos, 'end')
-                    if not idx:
-                        break
-                    pos = '{}+{}c'.format(idx, len(message))
-                    contentBox.tag_add(f'FAILED-{y}', idx, pos)
-
-                contentBox.tag_config(f'FAILED-{y}', foreground="red")
+                search(message, y)
+                contentBox.tag_config(f'{y}', foreground="red")
                 Log(logFile, 'err',
                              f'Failed to autoinstall dependency {y}. Command exited with code "{process.returncode}."')
+            # Every time the for loops goes through and attempts a dependency installation, update the window
             window.update()
 
+        # Once installation is complete, create a new button to continue to the next part
         mainButton2 = tk.Button(window)
         mainButton2["text"] = "Continue"
         mainButton2["command"] = lambda: gInstall3()
@@ -117,7 +131,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
     header['text'] = 'Failed to load the following dependencies:'
     header.place(x=-1, y=0, width=400, height=64)
 
-    ## Content box (first lists dependencies, then output of autoinstall)
+    ## Content box (first lists dependencies, then output of installation after window update)
     contentBox = tk.Text(window, wrap='word')
     contentBox['borderwidth'] = '3px'
     contentBox['font'] = tkFont.Font(family='Times', size=12)
@@ -127,7 +141,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
         contentBox.insert('end', x + '\n')
     contentBox.place(x=10, y=80, width=382, height=144)
 
-    ## Scrollbar - In case there's a lot of dependencies that need installation
+    ## Scrollbar - In case there's a lot of output
     scrollbar = Scrollbar(contentBox, orient='vertical', width=7)
     scrollbar.pack(side='right', fill='both')
     contentBox.config(yscrollcommand=scrollbar.set)
