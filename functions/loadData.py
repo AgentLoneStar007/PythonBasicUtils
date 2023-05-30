@@ -20,3 +20,10 @@ def loadAppData():
         app = json.load(file)
         file.close()
         return app
+
+
+def loadUpdateConfig():
+    with open('data/updateConfig.json', 'r') as file:
+        update = json.load(file)
+        file.close()
+        return update

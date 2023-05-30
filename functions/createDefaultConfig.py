@@ -11,7 +11,10 @@ class CreateDefaultConfig:
 debug: false
 
 # Set location of log files
-logFolder: "logs"
+logFolder: 'logs'
+
+# Choose whether you want to use pre-release updates or stable updates.
+updateChannel: 'stable'
 '''
 
         if not os.path.isfile('config.yml'):

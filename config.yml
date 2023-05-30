@@ -1,5 +1,8 @@
 # Enable this option to log more verbose output. Makes debugging easier. 
 debug: false
 
-# Set location of log files
-logFolder: "logs"
+# Set the location of log files.
+logFolder: 'logs'
+
+# Choose whether you want to use pre-release updates or stable updates.
+updateChannel: 'stable'
