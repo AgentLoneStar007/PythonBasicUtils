@@ -22,7 +22,6 @@ class Main:
         InstallDependencies(logFile)
 
         # Your code here. Don't forget to pass the log file through to your classes and functions.
-        CheckForUpdates('https://api.github.com/repos/AgentLoneStar007/TEST-REPO/releases', logFile)
 
 
 Main()
