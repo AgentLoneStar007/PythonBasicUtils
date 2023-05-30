@@ -4,6 +4,11 @@
       "name": "PyYAML",
       "import": "import yaml",
       "install": "python3 -m pip install pyyaml -q -q -q"
+    },
+    {
+      "name": "Requests",
+      "import": "import requests",
+      "install": "python3 -m pip install requests -q -q -q"
     }
   ]
 }
