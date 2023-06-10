@@ -2,7 +2,7 @@
 
 A collection of basic Python utilities for use in any Python project, in the form of
 subclasses and files, and not as a third-party dependency that needs installation.
-Completely cross-platform, functioning on anything supporting Python 3. (No support for
+Completely cross-platform, functioning on anything supporting Python 3.4+. (No support for
 Python 2 is planned.)
 
 ### Features:
