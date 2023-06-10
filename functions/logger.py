@@ -43,6 +43,8 @@ def setCurrentFile():
     for x in os.listdir(logFolder):
         if x.endswith('.log'):
             try:
+                # Only add it if the first date given(month) is between 1 and 12. This will work even if the file
+                # doesn't have the correct naming scheme
                 if 1 <= int(x[:2]) <= 12:
                     existingLogs.append(x)
             except:

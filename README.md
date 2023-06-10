@@ -17,8 +17,8 @@ Python 2 is planned.)
 
 ### Installation/Usage:
 
-Simply clone this repository and start creating your project inside the Main
-class.
+Simply clone the Main branch of this repository(main is selected by default), and start
+creating your project inside the Main file/class.
 
 #### Setting up your app:
 Change the values in `data/app.json` to your liking. Default values are:
