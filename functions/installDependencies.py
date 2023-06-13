@@ -21,35 +21,65 @@ def loadDependencies():
     dependNames = []
     dependImport = []
     dependInstall = []
+    dependRequired = []
 
     # Import the data into the lists
     for x in depends["dependencies"]:
         dependNames.append(x['name'])
         dependImport.append(x['import'])
         dependInstall.append(x['install'])
+        dependRequired.append(x['required'])
 
     # When the function is used, return the lists
-    return dependNames, dependImport, dependInstall
+    return dependNames, dependImport, dependInstall, dependRequired
 
 
 def graphicalInstall(logFile: str, failedInstalls: list):
     def gInstall2():
         def gInstall3():
+            def gInstall4():
+                print(window)
+                # Destroy the window and specify that it is no longer active
+                window.destroy()
+                global isWindowAlive
+                isWindowAlive = False
+                # Continue with program
+                return
+
+            # Define if window is alive - there's probably a better way to do this
+            global isWindowAlive # If I don't define it globally both times, it causes an error
+            isWindowAlive = True
+
             # If any dependencies failed, update the top label to give more information, and update the button to quit
             # the program
-            if anyFailed:
-                header['text'] = 'Some dependencies failed to install.\nCannot continue.'
-                mainButton2.destroy()
+            if len(failedInstalls) >= 1:
+                for x in failedInstalls:
+                    if required[(names.index(x))]:
+                        header['text'] = 'Required dependencies failed to install.\nCannot continue.'
+                        mainButton2.destroy()
+                        mainButton3 = tk.Button(window)
+                        mainButton3["text"] = "Quit"
+                        mainButton3["command"] = lambda: quit()
+                        mainButton3.place(x=325, y=270, width=70, height=25)
+                        window.update()
+                        # Must start a main loop; otherwise window will close immediately
+                        window.mainloop()
+
+                header['text'] = 'Some dependencies failed to install, but they \nare optional. Do you want to continue?'
+                mainButton2["text"] = "Quit"
+                mainButton2["command"] = lambda: quit()
+                mainButton2.place(x=250, y=270, width=70, height=25)
                 mainButton3 = tk.Button(window)
-                mainButton3["text"] = "Quit"
-                mainButton3["command"] = lambda: quit()
+                mainButton3["text"] = "Continue"
+                mainButton3["command"] = lambda: gInstall4()
                 mainButton3.place(x=325, y=270, width=70, height=25)
                 window.update()
                 # Must start a main loop; otherwise window will close immediately
                 window.mainloop()
 
             # Quit the window and continue with the program otherwise
-            window.destroy()
+            if isWindowAlive:
+                window.destroy()
 
         # Update the window for autoinstall
         ## Update content box
@@ -115,7 +145,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
         window.update()
 
     # Load the data - there's probably a more efficient way of doing this
-    names, imports, installs = loadDependencies()
+    names, imports, installs, required = loadDependencies()
 
     # Create the window and set some specs
     window = tk.Tk()
@@ -172,33 +202,33 @@ def graphicalInstall(logFile: str, failedInstalls: list):
     window.mainloop()
 
 
-def terminalInstall(logFile: str, failedInstalls: list):
+def terminalInstall(logFile: str, failedImports: list):
     # Load the data
-    names, imports, installs = loadDependencies()
+    names, imports, installs, required = loadDependencies()
 
     # Print dependencies needing installation
     print(f'{Colors.ForeG.yellow}Could not load dependency(s) ', end='')
     # Do some formatting so the list looks good
-    for x in failedInstalls:
+    for x in failedImports:
         # If there's only one item in the list, print it like, "(item)."
-        if len(failedInstalls) == 1:
+        if len(failedImports) == 1:
             print(f'{x}.', end='')
             break
         # If the current item is last in the list, print it like, "and (item)."
-        if x == failedInstalls[-1]:
+        if x == failedImports[-1]:
             print(f'and {x}.', end='')
             break
         print(f'{x}, ', end='')
     print(f'{Colors.reset}')
 
     # Log the failed dependencies
-    Log(logFile, 'err', f'Could not load dependency(s): {failedInstalls}.')
+    Log(logFile, 'err', f'Could not load dependency(s): {failedImports}.')
 
     # Attempt autoinstall
     autoInstall = input(f'Would you like to attempt an autoinstall? <Y/n> ')
-    if autoInstall.lower() == 'y':
-        anyFailed = False
-        for x in failedInstalls:
+    if autoInstall.lower() == 'y' or autoInstall == '':
+        failedInstalls = []
+        for x in failedImports:
             # Run the given installation command and log it as debug
             Log(logFile, 'debug', f'Attempting autoinstall of {x} with command'
                                   f"{installs[names.index(x)]}.")
@@ -212,18 +242,26 @@ def terminalInstall(logFile: str, failedInstalls: list):
 
             # If unsuccessful, give name and install command of the module, then continue
             else:
-                anyFailed = True
+                failedInstalls.append(x)
                 print(f'{Colors.ForeG.red}Install failed. If you wish to attempt a manual installation, '
-                      f'the name of the module is {x}, and the install command should be'
+                      f'the name of the module is {x}, and the install command should be '
                       f'"{installs[names.index(x)]}".{Colors.reset}')
                 Log(logFile, 'err', f'Failed to autoinstall dependency {x}. Command '
                              f'exited with code "{process.returncode}."')
 
-        # If any dependencies failed to install, exit the program
-        if anyFailed:
-            print(f'{Colors.ForeG.red}Some dependencies failed to install. Cannot continue.')
-            input(f'Press Enter to exit...{Colors.reset}')
-            quit()
+        # If any dependencies failed to install, check if they were required
+        if len(failedInstalls) >= 1:
+            for x in failedInstalls:
+                if required[(names.index(x))]:
+                    print(f'{Colors.ForeG.red}Required dependency {x} failed to install. Cannot continue.')
+                    input(f'Press Enter to exit...{Colors.reset}')
+                    quit()
+            print(f'{Colors.ForeG.yellow}Some dependencies failed to install, but they are optional.')
+            ans = input('Do you want to continue? <Y/n> ')
+            if ans.lower() == 'y' or ans == '':
+                return
+            else:
+                quit()
 
     # If user does not attempt autoinstall, exit the program
     else:
@@ -238,12 +276,12 @@ class InstallDependencies:
         appType = loadAppData()['app-type']
 
         # Get dependencies that need installation, if any
-        names, imports, installs = loadDependencies()
+        names, imports, installs, required = loadDependencies()
 
         # If the lists aren't empty, run the following code - change this if you have no dependencies needing
         # installation.
         if names is not None and imports is not None and installs is not None:
-            failedInstalls = []
+            failedImports = []
 
             # For each item in the lists, attempt to import it
             for x in imports:
@@ -252,15 +290,15 @@ class InstallDependencies:
 
                 # If failed, add the item to a list of dependencies that need installation
                 except:
-                    failedInstalls.append(names[imports.index(x)])
+                    failedImports.append(names[imports.index(x)])
 
             # If there are any failed imports, run the error dialogue/autoinstaller
-            if len(failedInstalls) >= 1:
+            if len(failedImports) >= 1:
                 # If graphical, use graphical installation. If terminal, use terminal installation.
                 if appType == 'graphical':
-                    graphicalInstall(logFile, failedInstalls)
+                    graphicalInstall(logFile, failedImports)
                 else:
-                    terminalInstall(logFile, failedInstalls)
+                    terminalInstall(logFile, failedImports)
 
         # If any of the three lists are empty, exit. Modify this code  to not exit if you don't need any dependencies to
         # be installed for some reason.
