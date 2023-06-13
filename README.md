@@ -1,8 +1,8 @@
 # Python Basic Utilities
 
 A collection of basic Python utilities for use in any Python project, in the form of
-subclasses and files, and not as a third-party dependency that needs installation.
-Completely cross-platform, functioning on anything supporting Python 3. (No support for
+classes and files, and not as a third-party dependency that needs installation.
+Completely cross-platform, functioning on anything supporting Python 3.4+. (No support for
 Python 2 is planned.)
 
 ### Features:
@@ -108,7 +108,7 @@ A simple example would be "`{"Print":"print('hi')"}`".
 
 - Add an option to handle dependency installation in a window, instead of a terminal.
 - Add more graphical elements overall.
-- Find a way to not have to pass the current log file to every subclass and function.
+- Find a way to not have to pass the current log file to every class and function.
 - Add more error handling for the program.
 - Create an automatic update system.
 
