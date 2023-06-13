@@ -4,6 +4,7 @@
 from functions.installDependencies import InstallDependencies
 from functions.createDefaultConfig import CreateDefaultConfig
 from functions.logger import setCurrentFile  # Import Log as well if you wish to log anything in Main.
+from functions.update import CheckForUpdates
 # See README for other things to import and use
 
 
@@ -22,6 +23,7 @@ class Main:
 
         # Your code here. Don't forget to pass the log file through to your classes and functions if you wish to log
         # events to a file.
+        CheckForUpdates('https://api.github.com/repos/CaffeineMC/sodium-fabric/releases', logFile)
 
 
 Main()

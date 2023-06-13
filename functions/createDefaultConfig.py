@@ -12,6 +12,9 @@ debug: false
 
 # Set location of log files
 logFolder: "logs"
+
+# Choose if you want to participate in beta updates
+updateBranch: "stable"
 '''
 
         if not os.path.isfile('config.yml'):
