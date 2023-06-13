@@ -34,11 +34,10 @@ def loadDependencies():
     return dependNames, dependImport, dependInstall, dependRequired
 
 
-def graphicalInstall(logFile: str, failedInstalls: list):
+def graphicalInstall(logFile: str, failedImports: list):
     def gInstall2():
         def gInstall3():
             def gInstall4():
-                print(window)
                 # Destroy the window and specify that it is no longer active
                 window.destroy()
                 global isWindowAlive
@@ -94,7 +93,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
         window.update()
 
         # Install the dependencies
-        anyFailed = False
+        failedInstalls = []
 
         # Function to search the content box and find the last printed message, then tag it
         def search(keyword, tag):
@@ -107,7 +106,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
                 contentBox.tag_add(f'{tag}', idx, pos)
 
         # I used Y here because X was used earlier
-        for y in failedInstalls:
+        for y in failedImports:
             # Attempt to install the dependency
             process = subprocess.Popen(installs[names.index(y)], shell=True, stdout=subprocess.PIPE)
             process.wait()
@@ -125,7 +124,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
             # If unsuccessful, give name and install command of the module, then continue
             else:
                 # If any dependency failed to install, update the anyFailed var to true
-                anyFailed = True
+                failedInstalls.append(y)
                 # See above for explanation of the following
                 message = f'Install of {y} failed. If you wish to attempt a manual installation, the install command ' \
                           f'should be "{installs[names.index(y)]}".'
@@ -167,7 +166,7 @@ def graphicalInstall(logFile: str, failedInstalls: list):
     contentBox['font'] = tkFont.Font(family='Times', size=12)
     contentBox['bg'] = '#B2B2B2'
     # Add every failed dependency to the listbox
-    for x in failedInstalls:
+    for x in failedImports:
         contentBox.insert('end', x + '\n')
     contentBox.place(x=10, y=80, width=382, height=144)
 
@@ -256,7 +255,7 @@ def terminalInstall(logFile: str, failedImports: list):
                     print(f'{Colors.ForeG.red}Required dependency {x} failed to install. Cannot continue.')
                     input(f'Press Enter to exit...{Colors.reset}')
                     quit()
-            print(f'{Colors.ForeG.yellow}Some dependencies failed to install, but they are optional.')
+            print(f'{Colors.ForeG.yellow}Some dependencies failed to install, but they are optional.{Colors.reset}')
             ans = input('Do you want to continue? <Y/n> ')
             if ans.lower() == 'y' or ans == '':
                 return
