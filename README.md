@@ -6,8 +6,7 @@ Completely cross-platform, functioning on anything supporting Python 3.4+. (No s
 Python 2 is planned.)
 
 ### Features:
-
-- Dependency installation
+- Dependency installation for both required and optional dependencies
 - Logging utility
 - Easy-to-use configuration system via PyYAML
 - Support for both terminal and graphical apps
@@ -16,7 +15,6 @@ Python 2 is planned.)
 - Commenting throughout for readable, understandable code
 
 ### Installation/Usage:
-
 Simply clone the Main branch of this repository(main is selected by default), and start
 creating your project inside the Main file/class.
 
@@ -44,12 +42,14 @@ existing dependency already in `dependencies.json`, and changing what is needed.
     {
       "name": "PyYAML",
       "import": "import yaml",
-      "install": "python3 -m pip install pyyaml -q -q -q"
+      "install": "python3 -m pip install pyyaml -q -q -q",
+      "required": true
     },
     {
       "name": "MyDependency",
       "import": "from mydependency import MyDependency",
-      "install": "python3 -m pip install mydependency -q -q -q"
+      "install": "python3 -m pip install mydependency -q -q -q",
+      "required": false
     }
   ]
 }
@@ -57,7 +57,8 @@ existing dependency already in `dependencies.json`, and changing what is needed.
 (Note that the `-q` args in the command are to prevent any output from Pip.
 And it's good practice to use `python3 -m pip` instead of `pip` directly, due to some
 individuals not having pip added to PATH. Specify `python3` to avoid interference with
-Python 2, if it's installed.)
+Python 2, if it's installed.) If a dependency is optional, simply change the `required`
+flag to `false`.
 
 #### Logging:
 Import `from functions.logger import Log` in any file or function that you wish to
@@ -86,6 +87,8 @@ if config:
 else:
     myValue = 'some default value'
 ```
+This ensures that if config has not been loaded, it won't return an error.
+
 If you add any values to the config file, be sure to add them to the
 `createDefaultConfig` function as well.
 
