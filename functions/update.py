@@ -16,24 +16,23 @@ class CheckForUpdates:
         for x in response.json():
             print(x['tag_name'])
 
-        #x = x.json()[0]
-        #x = x.lower().replace('version', '')
-        #if 'v' in x.lower():
-        #    x = x.lower().replace('v', '')
-        #latestVersion = x#.lower()
-        #print(latestVersion)
+        x = x.json()[0]
+        x = x.lower().replace('version', '')
+        if 'v' in x.lower():
+            x = x.lower().replace('v', '')
+        latestVersion = x#.lower()
+        print(latestVersion)
         #latestVersionDownload =
+        if float(latestVersion) > float(currentVersion):
+            if appType == 'graphical':
+                return
+            else:
+                Log(logFile, 'info', f'Update {latestVersion} is available! (Current version is {currentVersion}.)')
+                print(f'{Colors.ForeG.lightGreen}Version {latestVersion} of {appName} is available!')
+                doUpdate = input(f'Would you like to install it? <Y/n> {Colors.reset}')
+                if doUpdate.lower() == 'y':
+                    return
 
-        #if float(latestVersion) > float(currentVersion):
-        #    if appType == 'graphical':
-        #        return
-        #    else:
-        #        Log(logFile, 'info', f'Update {latestVersion} is available! (Current version is {currentVersion}.)')
-        #        print(f'{Colors.ForeG.lightGreen}Version {latestVersion} of {appName} is available!')
-        #        doUpdate = input(f'Would you like to install it? <Y/n> {Colors.reset}')
-        #        if doUpdate.lower() == 'y':
-        #            return
-
-        #else:
-        #    return
+        else:
+            return
 

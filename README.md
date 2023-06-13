@@ -1,12 +1,10 @@
 # Python Basic Utilities
-
 A collection of basic Python utilities for use in any Python project, in the form of
-subclasses and files, and not as a third-party dependency that needs installation.
-Completely cross-platform, functioning on anything supporting Python 3. (No support for
+classes and files, and not as a third-party dependency that needs installation.
+Completely cross-platform, functioning on anything supporting Python 3.4+. (No support for
 Python 2 is planned.)
 
 ### Features:
-
 - Dependency installation
 - Logging utility
 - Easy-to-use configuration system via PyYAML
@@ -17,8 +15,8 @@ Python 2 is planned.)
 
 ### Installation/Usage:
 
-Simply clone this repository and start creating your project inside the Main
-class.
+Simply clone the Main branch of this repository(main is selected by default), and start
+creating your project inside the Main file/class.
 
 #### Setting up your app:
 Change the values in `data/app.json` to your liking. Default values are:
@@ -44,12 +42,14 @@ existing dependency already in `dependencies.json`, and changing what is needed.
     {
       "name": "PyYAML",
       "import": "import yaml",
-      "install": "python3 -m pip install pyyaml -q -q -q"
+      "install": "python3 -m pip install pyyaml -q -q -q",
+      "required": true
     },
     {
       "name": "MyDependency",
       "import": "from mydependency import MyDependency",
-      "install": "python3 -m pip install mydependency -q -q -q"
+      "install": "python3 -m pip install mydependency -q -q -q",
+      "required": true
     }
   ]
 }
@@ -57,7 +57,8 @@ existing dependency already in `dependencies.json`, and changing what is needed.
 (Note that the `-q` args in the command are to prevent any output from Pip.
 And it's good practice to use `python3 -m pip` instead of `pip` directly, due to some
 individuals not having pip added to PATH. Specify `python3` to avoid interference with
-Python 2, if it's installed.)
+Python 2, if it's installed.) If a dependency is optional, simply change `required` to
+false.
 
 #### Logging:
 Import `from functions.logger import Log` in any file or function that you wish to
@@ -86,6 +87,8 @@ if config:
 else:
     myValue = 'some default value'
 ```
+This will ensure there won't be any errors if a config file is not present.
+
 If you add any values to the config file, be sure to add them to the
 `createDefaultConfig` function as well.
 
@@ -105,13 +108,10 @@ A simple example would be "`{"Print":"print('hi')"}`".
 - `logFile`: The file to log to. (required)
 
 ### To-do:
-
-- Add an option to handle dependency installation in a window, instead of a terminal.
 - Add more graphical elements overall.
-- Find a way to not have to pass the current log file to every subclass and function.
+- Find a way to not have to pass the current log file to every class and function.
 - Add more error handling for the program.
 - Create an automatic update system.
 
 ### Credit:
-
 Don't remove the comments stating me as author.
