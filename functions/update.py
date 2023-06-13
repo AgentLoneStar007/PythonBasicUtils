@@ -16,15 +16,19 @@ class CheckForUpdates:
         #response = requests.get(serverURL)
         #response.json():
         versionsList = ['v0.1-alpha', 'version0.3-beta', '0.8-pre_release', '0.9', 'v1.2', 'version-1.4', 'version_1.5',
-                    'version1.6-pre-release', '1.7.9.25', '1.8-pre_release', 'version-1.9.3.12-alpha']
+                        'version1.6-pre-release', '1.7.9.25', '1.8']
 
-        # versions list contains version numbers. versionTypes list contains booleans stating whether version is beta
-        # or not
+        # "versions" list contains version numbers. "versionTypes" list contains booleans stating whether version is
+        # beta or not.
         versions = []
         versionTypes = []
 
         # Iterate over every version in available versions
         for x in versionsList:
+            # If your releases have funky stuff in the version name, I would recommend using RegEx to remove it
+            # so this update system is compatible with it.
+
+
             #print(x['tag_name'])
             # Format the version name so that any junk is removed and it's lowercase
             x = x.lower()
@@ -42,12 +46,10 @@ class CheckForUpdates:
             # Add the version to the versions list
             versions.append(x)
 
-        print(versions)
-        print(versionTypes)
-
         # Function that compares two versions, stating whether one is newer than another, or that they're the same
-        def compareVersions(version1, version2):
-            # Split the version at the decimal point, and append the numbers to a list
+        def checkIfUpdateAvailable(version1, version2):
+            # Split the version at the decimal point, and append the numbers to a list - top is current, bottom is
+            # newest
             v1_parts = version1.split('.')
             v2_parts = version2.split('.')
 
@@ -56,14 +58,16 @@ class CheckForUpdates:
                 v1_val = int(v1_parts[i]) if i < len(v1_parts) else 0
                 v2_val = int(v2_parts[i]) if i < len(v2_parts) else 0
 
-                # If one version is newer than another, return so
+                # If one version is newer than another, return True
                 if v1_val < v2_val:
-                    return f"Version {version2} is newer than {version1}."
-                elif v1_val > v2_val:
-                    return f"Version {version1} is newer than {version2}."
+                    return True
 
-            # Otherwise, return that they're the same
-            return f"The versions {version1} and {version2} are the same."
+            # Otherwise, return False
+                elif v1_val > v2_val:
+                    return False
+
+            else:
+                return False
 
         # Function that iterates over the entire version list to see what the latest version is, excluding betas if
         # requested
@@ -73,7 +77,11 @@ class CheckForUpdates:
 
             return returnedVersion
 
+        # Assign newest version variable
         newestVersion = getNewestVersion(False)
-        print(compareVersions(currentVersion, newestVersion))
+
+        # If update is available, proceed with update dialogue, depending on whether app is terminal or graphical
+        if checkIfUpdateAvailable(currentVersion, newestVersion):
+            return 
 
 
