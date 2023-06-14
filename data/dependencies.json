@@ -3,7 +3,7 @@
     {
       "name": "PyYAML",
       "import": "import yaml",
-      "install": "python3 -m pip install pyyaml -q -q -q",
+      "install": "python -m pip install pyyaml -q -q -q",
       "required": true
     }
   ]
