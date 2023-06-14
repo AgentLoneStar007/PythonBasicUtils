@@ -3,14 +3,18 @@
 
 import json
 
+
 def loadConfig():
+    # Try to load the config. If the process succeeds, return a dictionary with the config
     try:
         import yaml
 
         file = open('config.yml', 'r')
         config = yaml.safe_load(file)
+        file.close()
         return config
 
+    # If failed, return false
     except:
         return False
 
