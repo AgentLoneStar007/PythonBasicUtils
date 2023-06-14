@@ -3,13 +3,19 @@
     {
       "name": "PyYAML",
       "import": "import yaml",
-      "install": "python3 -m pip install pyyaml -q -q -q",
+      "install": "python -m pip install pyyaml -q -q -q",
       "required": true
     },
     {
       "name": "Requests",
       "import": "import requests",
-      "install": "python3 -m pip install requests -q -q -q",
+      "install": "python -m pip install requests -q -q -q",
+      "required": false
+    },
+    {
+      "name": "GitPython",
+      "import": "from git import Repo",
+      "install": "python -m pip install gitpython -q -q -q",
       "required": true
     }
   ]

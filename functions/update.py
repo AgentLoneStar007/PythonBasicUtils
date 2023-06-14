@@ -1,4 +1,3 @@
-import requests
 import re
 from functions.loadData import loadAppData, loadConfig
 from functions.logger import Log
@@ -7,6 +6,18 @@ from data.colors import Colors
 
 class CheckForUpdates:
     def __init__(self, serverURL: str, logFile: str):
+        # Dependencies marked as optional must be imported in a try-except block
+        try:
+            import requests
+            from git import repo
+        except Exception as e:
+            print(f'{Colors.ForeG.yellow}Update functionality unavailable. Failed to import one or both of the required'
+                  f' dependencies(Requests, GitPython).{Colors.reset}'
+                  )
+            Log(logFile, 'err', 'Failed to import one or more of the required dependencies(Requests, GitPython) for '
+                                f'update functionality with the following error: {e}')
+            return
+
         # Get the current app name, type, and version
         appName = loadAppData()['name']
         appType = loadAppData()['app-type']

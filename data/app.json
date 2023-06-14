@@ -2,5 +2,5 @@
   "name": "My App",
   "version": "0.1",
   "author": "A Person",
-  "app-type": "terminal"
+  "app-type": "graphical"
 }
