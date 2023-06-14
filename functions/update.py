@@ -1,6 +1,6 @@
 import requests
 import re
-from functions.loadData import loadAppData
+from functions.loadData import loadAppData, loadConfig
 from functions.logger import Log
 from data.colors import Colors
 
@@ -12,11 +12,16 @@ class CheckForUpdates:
         appType = loadAppData()['app-type']
         currentVersion = loadAppData()['version']
 
+        # See if user wants beta updates
+        config = loadConfig()
+        includeBetas = config['participateInBetas']
+
         # Get the info on the latest release from the server URL
         #response = requests.get(serverURL)
         #response.json():
+        #print(x['tag_name'])
         versionsList = ['v0.1-alpha', 'version0.3-beta', '0.8-pre_release', '0.9', 'v1.2', 'version-1.4', 'version_1.5',
-                        'version1.6-pre-release', '1.7.9.25', '1.8']
+                        'version1.6-pre-release', '1.8', '1.8.1-beta']
 
         # "versions" list contains version numbers. "versionTypes" list contains booleans stating whether version is
         # beta or not.
@@ -28,8 +33,6 @@ class CheckForUpdates:
             # If your releases have funky stuff in the version name, I would recommend using RegEx to remove it
             # so this update system is compatible with it.
 
-
-            #print(x['tag_name'])
             # Format the version name so that any junk is removed and it's lowercase
             x = x.lower()
             x = re.sub(r'^(?:version[-_]?|v[-_]?)', '', x)
@@ -71,17 +74,17 @@ class CheckForUpdates:
 
         # Function that iterates over the entire version list to see what the latest version is, excluding betas if
         # requested
-        def getNewestVersion(includeBetas):
+        def getNewestVersion():
             filteredVersions = [version for version, beta in zip(versions, versionTypes) if includeBetas or not beta]
             returnedVersion = max(filteredVersions) if filteredVersions else None
 
             return returnedVersion
 
         # Assign newest version variable
-        newestVersion = getNewestVersion(False)
+        newestVersion = getNewestVersion()
 
         # If update is available, proceed with update dialogue, depending on whether app is terminal or graphical
         if checkIfUpdateAvailable(currentVersion, newestVersion):
-            return 
+            print('Update available!')
 
 

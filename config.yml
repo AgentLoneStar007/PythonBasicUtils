@@ -4,5 +4,5 @@ debug: false
 # Set location of log files
 logFolder: "logs"
 
-# Choose if you want to participate in beta updates
-updateBranch: "stable"
+# Set to true if you want to participate in beta updates
+participateInBetas: false
