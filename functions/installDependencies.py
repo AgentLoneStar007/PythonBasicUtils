@@ -5,6 +5,7 @@ import json
 import subprocess
 from functions.logger import Log
 from functions.loadData import loadAppData
+from functions.graphicalDialogue import GDialogue
 from data.colors import Colors
 import tkinter as tk
 import tkinter.font as tkFont
@@ -146,6 +147,17 @@ def graphicalInstall(logFile: str, failedImports: list):
     # Load the data - there's probably a more efficient way of doing this
     names, imports, installs, required = loadDependencies()
 
+    # Create a function to run that will close the window and continue with program execution if user chooses to skip
+    # dependency installation
+    def skipInstall():
+        window.destroy()
+        for x in failedImports:
+            if required[(names.index(x))]:
+                GDialogue(f'Program cannot continue without dependency "{x}."', None, None, None, logFile)
+                quit()
+
+        return
+
     # Create the window and set some specs
     window = tk.Tk()
     window.geometry('400x300')
@@ -192,8 +204,8 @@ def graphicalInstall(logFile: str, failedImports: list):
     ## Deny autoinstall button - exits program
     quitButton = tk.Button(window)
     quitButton["justify"] = "center"
-    quitButton["text"] = "Quit"
-    quitButton["command"] = lambda: quit()
+    quitButton["text"] = "No"
+    quitButton["command"] = lambda: skipInstall()
     quitButton.place(x=250, y=270, width=70, height=25)
 
     # Run the window and log it
@@ -262,11 +274,17 @@ def terminalInstall(logFile: str, failedImports: list):
             else:
                 quit()
 
-    # If user does not attempt autoinstall, exit the program
+    # If user does not attempt autoinstall...
     else:
-        print(f'{Colors.ForeG.red}Program cannot continue without these dependencies.')
-        input(f'Press Enter to exit...{Colors.reset}')
-        quit()
+        for x in failedImports:
+            # exit the program if a required dependency wasn't installed
+            if required[(names.index(x))]:
+                print(f'{Colors.ForeG.red}Program cannot continue without dependency "{x}."')
+                input(f'Press Enter to exit...{Colors.reset}')
+                quit()
+            # or continue
+
+
 
 
 class InstallDependencies:
