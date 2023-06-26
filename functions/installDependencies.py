@@ -3,6 +3,7 @@
 
 import json
 import subprocess
+import sys
 from functions.logger import Log
 from functions.loadData import loadAppData
 from functions.graphicalDialogue import GDialogue
@@ -59,15 +60,16 @@ def graphicalInstall(logFile: str, failedImports: list):
                         mainButton2.destroy()
                         mainButton3 = tk.Button(window)
                         mainButton3["text"] = "Quit"
-                        mainButton3["command"] = lambda: quit()
+                        mainButton3["command"] = lambda: sys.exit(71)
                         mainButton3.place(x=325, y=270, width=70, height=25)
                         window.update()
                         # Must start a main loop; otherwise window will close immediately
                         window.mainloop()
 
-                header['text'] = 'Some dependencies failed to install, but they \nare optional. Do you want to continue?'
+                header['text'] = 'Some dependencies failed to install, but they ' \
+                                 '\nare optional. Do you want to continue?'
                 mainButton2["text"] = "Quit"
-                mainButton2["command"] = lambda: quit()
+                mainButton2["command"] = lambda: sys.exit(75)
                 mainButton2.place(x=250, y=270, width=70, height=25)
                 mainButton3 = tk.Button(window)
                 mainButton3["text"] = "Continue"
@@ -154,7 +156,7 @@ def graphicalInstall(logFile: str, failedImports: list):
         for x in failedImports:
             if required[(names.index(x))]:
                 GDialogue(f'Program cannot continue without dependency "{x}."', None, None, None, logFile)
-                quit()
+                sys.exit(71)
 
         return
 
@@ -242,7 +244,7 @@ def terminalInstall(logFile: str, failedImports: list):
         for x in failedImports:
             # Run the given installation command and log it as debug
             Log(logFile, 'debug', f'Attempting autoinstall of {x} with command'
-                                  f"{installs[names.index(x)]}.")
+                                  f'{installs[names.index(x)]}.')
             process = subprocess.Popen(installs[names.index(x)], shell=True, stdout=subprocess.PIPE)
             process.wait()
             # If successful, continue
@@ -266,13 +268,13 @@ def terminalInstall(logFile: str, failedImports: list):
                 if required[(names.index(x))]:
                     print(f'{Colors.ForeG.red}Required dependency {x} failed to install. Cannot continue.')
                     input(f'Press Enter to exit...{Colors.reset}')
-                    quit()
+                    sys.exit(71)
             print(f'{Colors.ForeG.yellow}Some dependencies failed to install, but they are optional.{Colors.reset}')
             ans = input('Do you want to continue? <Y/n> ')
             if ans.lower() == 'y' or ans == '':
                 return
             else:
-                quit()
+                sys.exit(75)
 
     # If user does not attempt autoinstall...
     else:
@@ -281,10 +283,8 @@ def terminalInstall(logFile: str, failedImports: list):
             if required[(names.index(x))]:
                 print(f'{Colors.ForeG.red}Program cannot continue without dependency "{x}."')
                 input(f'Press Enter to exit...{Colors.reset}')
-                quit()
+                sys.exit(71)
             # or continue
-
-
 
 
 class InstallDependencies:
@@ -322,4 +322,4 @@ class InstallDependencies:
         else:
             print(f'{Colors.ForeG.red}Dependency file is empty, for some reason. Unable to continue.')
             input(f'Press Enter to exit...{Colors.reset}')
-            quit()
+            sys.exit(72)
